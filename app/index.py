@@ -5,6 +5,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+
 load_dotenv()
 pdf_path = Path(__file__).parent / "data" / "COMPUTER NETWORKS NOTES.pdf"
 
@@ -24,18 +25,19 @@ text_splitter =  RecursiveCharacterTextSplitter(
 chunks = text_splitter.split_documents(documents=docs)
 
 # embding  model
-embedding_model =  OpenAIEmbeddings(
+embedding_model = OpenAIEmbeddings(
     model="text-embedding-3-large"
 )
 
-#create  a Qdrant vectore 
-vector_store =  QdrantVectorStore(
-    # documents = chunks,
+# 4. Automatically Creates Collection & Adds Documents
+vector_store = QdrantVectorStore.from_documents(
+    documents=chunks,
     embedding=embedding_model,
-    collection_name="sample_collection",
-    # url="http://localhost:6333"
+    url="http://localhost:6333",
+    collection_name="sample_collection"
 )
 
-print("Vector store create and document embedded successfully. ")
-   
-   
+print("Vector store created and documents embedded successfully.")
+
+
+#https://f28b9454-2f95-40cc-b000-76fc3abece36.eu-central-1-0.aws.cloud.qdrant.io
